@@ -5938,6 +5938,7 @@
     /* ████████████████████████████████████████████████████████████████ */
 
     @media (max-width: 768px) {
+
       /* General mobile adjustments */
       body {
         font-size: 14px;
@@ -5966,7 +5967,8 @@
         flex-direction: column;
       }
 
-      .bcfg, .bjoin {
+      .bcfg,
+      .bjoin {
         width: 100%;
         text-align: center;
       }
@@ -6135,7 +6137,9 @@
         font-size: 11px;
       }
 
-      .adm-in, .adm-ta, .adm-sel {
+      .adm-in,
+      .adm-ta,
+      .adm-sel {
         padding: 8px 10px;
         font-size: 12px;
       }
@@ -6212,7 +6216,7 @@
         margin-bottom: 4px;
       }
 
-      .modal > p {
+      .modal>p {
         font-size: 12px;
       }
 
@@ -6225,7 +6229,8 @@
         font-size: 10px;
       }
 
-      .bcl, .bsv {
+      .bcl,
+      .bsv {
         padding: 6px 13px;
         font-size: 12px;
       }
@@ -6528,7 +6533,8 @@
       }
 
       /* Results/recommendations  */
-      .sl, .rl {
+      .sl,
+      .rl {
         gap: 4px;
         margin-bottom: 12px;
       }
@@ -6648,6 +6654,7 @@
     /* ████████████████████████████████████████████████████████████████ */
 
     @media (max-width: 480px) {
+
       /* General */
       body {
         font-size: 13px;
@@ -6776,7 +6783,8 @@
         gap: 6px;
       }
 
-      .bcl, .bsv {
+      .bcl,
+      .bsv {
         width: 100%;
         padding: 8px 12px;
         font-size: 11px;
@@ -6815,7 +6823,8 @@
       }
 
       /* Admin inputs */
-      .adm-in, .adm-ta {
+      .adm-in,
+      .adm-ta {
         padding: 7px 9px;
         font-size: 11px;
       }
@@ -6877,7 +6886,14 @@
       }
 
       /* Ensure touch targets are at least 44x44px */
-      button, .pill, .ref-btn, .src-tog, .exp-btn, .synth-btn, .adm-btn, .aj-del {
+      button,
+      .pill,
+      .ref-btn,
+      .src-tog,
+      .exp-btn,
+      .synth-btn,
+      .adm-btn,
+      .aj-del {
         min-height: 40px;
         min-width: 40px;
       }
@@ -6925,7 +6941,8 @@
         margin-bottom: 12px;
       }
 
-      .adm-card, .eng-card {
+      .adm-card,
+      .eng-card {
         padding: 12px;
       }
 
@@ -8009,8 +8026,6 @@
         </div>
       </div>
     </div>
-
-    id="tab-engagement">
     <div class="section-rule">Structured Engagement Support</div>
     <div class="engagement-grid">
       <div class="eng-card">
@@ -8250,10 +8265,7 @@
   </div>
 
 
-
   <div class="toast" id="gpn-toast"></div>
-
-
 
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script>
@@ -8825,7 +8837,6 @@
     <div class="chat-bubble"><div class="gpn-cards">${html}</div></div>`;
       document.getElementById('chat-messages').appendChild(el); scrollChat();
     }
-
     async function sendChatQuery() {
       const input = document.getElementById('chat-input');
       const q = input.value.trim(); if (!q) return;
@@ -8843,7 +8854,7 @@
       }
       if (btn) btn.disabled = false;
     }
-
+// ---------------------------------------------------------------AI CHAT-----------------------------------------------------
     async function runChatEngine(q) {
       try {
         const formData = new FormData();
@@ -8855,30 +8866,15 @@
         });
         if (!resp.ok) throw new Error('Backend error ' + resp.status);
         const data = await resp.json();
-        if (data && (data.session_id || data.sessionId)) {
-          setSessionCookie(data.session_id || data.sessionId);
-        }
-        if (Array.isArray(data)) return data;
-        if (data && typeof data.chat === 'string') {
-          return [{
-            type: 'claude',
-            headline: 'AI Response',
-            answer: data.chat,
-            keyPoints: [],
-            relevance: 'high'
-          }];
-        }
-        if (data && data.answer) {
-          return [{
-            type: 'claude',
-            headline: data.headline || 'AI Response',
-            answer: data.answer,
-            keyPoints: data.keyPoints || [],
-            relevance: data.relevance || 'high'
-          }];
-        }
-        if (data && data.type && data.type === 'claude') return [data];
-        throw new Error('Invalid backend response');
+        const text = data.chat || data.answer || "No response from server";
+        return [{
+          type: 'claude',
+          headline: 'AI Response',
+          answer: text,
+          keyPoints: [],
+          relevance: 'high'
+        }];
+
       } catch (e) {
         var results = [];
         results.push(faqEngine(q));

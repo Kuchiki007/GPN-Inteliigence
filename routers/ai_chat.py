@@ -7,7 +7,7 @@ router = APIRouter(prefix="/ai_chat")
 
 session_id = {}
 
-instruction = "You are a friendly AI assistant. Don't use any appropriate words or expressions"
+instruction = "You are a healthcare assistant."
 model = ChatModel()
 
 def get_context(id):
@@ -21,20 +21,20 @@ def get_context(id):
 @router.post("/")
 def chat_api(request: Request,
              user_chat: str = Form(...)):
-    payload = request.cookies.get("session_id")
+    id = request.cookies.get("session_id")
     # id = payload["session_id"]
-    context = get_context(payload)
+    context = get_context(id)
 
-    context.append({'role': 'assistant', 'content': user_chat})
+    context.append({'role': 'user', 'content': user_chat})
     ai_chat = model(user_chat, context)
-    context.append({'role': 'assistant', 'content': {ai_chat}})
+    context.append({'role': 'assistant', 'content': ai_chat})
 
     return {"chat": ai_chat}
 
 @router.patch("/context_reset")
 def chat_context_api(request: Request):
-    payload = request.cookies.get("session_token")
-    id = payload["session_id"]
+    id = request.cookies.get("session_id")
+    # id = payload["session_id"]
     context = get_context(id)
     context = [
         {'role': 'system', 'content': f'{instruction}'}
